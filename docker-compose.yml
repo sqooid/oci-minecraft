@@ -1,0 +1,7 @@
+services:
+  terraform:
+    image: hashicorp/terraform:1.2.8
+    container_name: oci-minecraft
+    volumes:
+      - .:/terraform
+    working_dir: /terraform
