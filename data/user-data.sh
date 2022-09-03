@@ -10,6 +10,8 @@ apt-get install -q -y openjdk-17-jre-headless vim
 
 iptables -I INPUT 6 -m state --state NEW -p tcp --dport 25565 -j ACCEPT
 
+timedatectl set-timezone ${timezone}
+
 mkdir -p /temp && cd /temp
 curl https://objectstorage.${region}.oraclecloud.com${setup_request}user-script.sh -o user-script.sh
 chmod +x ./user-script.sh

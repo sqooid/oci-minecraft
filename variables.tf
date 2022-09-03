@@ -20,3 +20,7 @@ variable "ssh_keys" {
   type    = set(string)
   default = []
 }
+variable "timezone" {
+  type    = string
+  default = "Etc/UTC"
+}
