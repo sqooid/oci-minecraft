@@ -1,3 +1,3 @@
 output "ip" {
-  value = oci_core_instance.main.public_ip
+  value = oci_core_public_ip.main.ip_address
 }

@@ -17,6 +17,24 @@ data "oci_core_images" "main" {
   sort_order               = "DESC"
 }
 
+data "oci_core_private_ips" "main" {
+  ip_address = oci_core_instance.main.private_ip
+  subnet_id  = oci_core_subnet.main.id
+}
+
+resource "oci_core_public_ip" "main" {
+  compartment_id = oci_identity_compartment.main.id
+  lifetime       = "RESERVED"
+  private_ip_id  = data.oci_core_private_ips.main.private_ips[0].id
+}
+
+resource "oci_core_volume" "main" {
+  compartment_id      = oci_identity_compartment.main.id
+  display_name        = "minecraft-main-volume"
+  availability_domain = data.oci_identity_availability_domains.available.availability_domains[0].name
+  size_in_gbs         = 150
+}
+
 resource "oci_core_instance" "main" {
   display_name        = "minecraft-server"
   compartment_id      = oci_identity_compartment.main.id
@@ -26,18 +44,20 @@ resource "oci_core_instance" "main" {
   metadata = {
     ssh_authorized_keys = join("\n", var.ssh_keys)
     user_data = base64encode(templatefile("${path.root}/data/user-data.sh", {
-      user_script = file("${path.root}/data/user-script.sh")
+      user_script   = file("${path.root}/data/user-script.sh")
+      setup_request = oci_objectstorage_preauthrequest.setup_access.access_uri
+      region        = var.region
     }))
   }
 
   create_vnic_details {
-    assign_public_ip = true
+    assign_public_ip = false
     subnet_id        = oci_core_subnet.main.id
     nsg_ids          = [oci_core_network_security_group.main.id]
   }
 
   source_details {
-    boot_volume_size_in_gbs = 200
+    boot_volume_size_in_gbs = 50
     source_id               = data.oci_core_images.main.images[0].id
     source_type             = "image"
   }
@@ -46,4 +66,10 @@ resource "oci_core_instance" "main" {
     memory_in_gbs = 24
     ocpus         = 4
   }
+}
+
+resource "oci_core_volume_attachment" "main" {
+  attachment_type = "iscsi"
+  instance_id     = oci_core_instance.main.id
+  volume_id       = oci_core_volume.main.id
 }

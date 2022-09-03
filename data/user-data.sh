@@ -1,17 +1,16 @@
 #!/bin/bash
 set -x
 
+sed -i "s/#\$nrconf{restart} = 'i'/\$nrconf{restart} = 'a'/" /etc/needrestart/needrestart.conf
+
 apt-get update -q -y
 apt-get upgrade -q -y
 
-apt-get install -q -y openjdk-17-jre-headless
+apt-get install -q -y openjdk-17-jre-headless vim
 
-mkdir -p /minecraft && cd /minecraft
-chown ubuntu:ubuntu /minecraft
+iptables -I INPUT 6 -m state --state NEW -p tcp --dport 25565 -j ACCEPT
 
-USER_SCRIPT=$(cat <<END
-${user_script}
-END
-)
-
-su -c "$USER_SCRIPT" ubuntu >> server.log
+mkdir -p /temp && cd /temp
+curl https://objectstorage.${region}.oraclecloud.com${setup_request}user-script.sh -o user-script.sh
+chmod +x ./user-script.sh
+su -c "./user-script.sh" ubuntu >> server.log 2>&1
