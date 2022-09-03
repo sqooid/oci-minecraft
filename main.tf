@@ -6,7 +6,7 @@ terraform {
     }
   }
   backend "http" {
-    address       = "https://objectstorage.ap-melbourne-1.oraclecloud.com/p/VGLgkDlzUnEbW1oRHdEyfeZT5M_AQwIgGxe7p-zR1AX_nr3lMWqVs7E1ySB4Yv4w/n/axt3lxcfu9il/b/terraform-tfstate/o/minecraft/terraform.tfstate"
+    address       = var.backend_address
     update_method = "PUT"
   }
 }

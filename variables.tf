@@ -1,3 +1,6 @@
+variable "backend_address" {
+  type = string
+}
 variable "tenancy_ocid" {
   type = string
 }
