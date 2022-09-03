@@ -38,4 +38,6 @@ curl \
 cd /minecraft
 java -jar server.jar nogui
 sed -i "s/false/true/" eula.txt
-java -Xmx20G -jar server.jar nogui
+echo "java -Xmx20G -jar server.jar nogui" > server-start.sh
+chmod +x server-start.sh
+./server-start.sh
