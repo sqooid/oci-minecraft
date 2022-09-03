@@ -23,13 +23,15 @@ resource "oci_core_instance" "main" {
   availability_domain = data.oci_identity_availability_domains.available.availability_domains[0].name
   shape               = "VM.Standard.A1.Flex"
 
-  metadata = jsonencode({
-
-  })
+  metadata = {
+    ssh_authorized_keys = join("\n", var.ssh_keys)
+    user_data           = base64encode(templatefile("${path.root}/data/user-data.sh", {}))
+  }
 
   create_vnic_details {
     assign_public_ip = true
     subnet_id        = oci_core_subnet.main.id
+    nsg_ids          = [oci_core_network_security_group.main.id]
   }
 
   source_details {
