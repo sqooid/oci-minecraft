@@ -6,7 +6,7 @@ terraform {
     }
   }
   backend "http" {
-    address       = var.backend_address
+    # address       = TF_HTTP_ADDRESS
     update_method = "PUT"
   }
 }

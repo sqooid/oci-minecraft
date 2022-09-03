@@ -25,7 +25,9 @@ resource "oci_core_instance" "main" {
 
   metadata = {
     ssh_authorized_keys = join("\n", var.ssh_keys)
-    user_data           = base64encode(templatefile("${path.root}/data/user-data.sh", {}))
+    user_data = base64encode(templatefile("${path.root}/data/user-data.sh", {
+      user_script = file("${path.root}/data/user-script.sh")
+    }))
   }
 
   create_vnic_details {
