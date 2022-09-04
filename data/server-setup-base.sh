@@ -20,5 +20,5 @@ curl \
 cd ..
 java -jar server.jar nogui
 sed -i "s/false/true/" eula.txt
-echo "java -Xmx20G -jar server.jar nogui" > server-start.sh
+echo "screen -dmLS minecraft bash -c 'java -Xmx20G -jar server.jar nogui | tee output.log'" > server-start.sh
 chmod +x server-start.sh
