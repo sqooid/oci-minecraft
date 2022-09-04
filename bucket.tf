@@ -21,13 +21,23 @@ resource "oci_objectstorage_preauthrequest" "setup_access" {
   time_expires = "2999-01-01T01:00:00Z"
 }
 
-resource "oci_objectstorage_object" "user_script" {
-  object = "user-script.sh"
+resource "oci_objectstorage_object" "server_setup_base" {
+  object    = "server-setup-base.sh"
+  bucket    = oci_objectstorage_bucket.setup.name
+  source    = "${path.root}/data/server-setup-base.sh"
+  namespace = oci_objectstorage_bucket.setup.namespace
+}
+
+resource "oci_objectstorage_object" "user_data_lazy" {
+  object = "user-data-lazy.sh"
   bucket = oci_objectstorage_bucket.setup.name
-  content = templatefile("${path.root}/data/user-script.sh", {
-    volume_iqn  = oci_core_volume_attachment.main.iqn
-    volume_ip   = oci_core_volume_attachment.main.ipv4
-    volume_port = oci_core_volume_attachment.main.port
+  content = templatefile("${path.root}/data/user-data-lazy.sh", {
+    volume_iqn    = oci_core_volume_attachment.main.iqn
+    volume_ip     = oci_core_volume_attachment.main.ipv4
+    volume_port   = oci_core_volume_attachment.main.port
+    setup_request = oci_objectstorage_preauthrequest.setup_access.access_uri
+    region        = var.region
+    timezone      = var.timezone
   })
   namespace = oci_objectstorage_bucket.setup.namespace
 }

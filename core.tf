@@ -47,7 +47,6 @@ resource "oci_core_instance" "main" {
       user_script   = file("${path.root}/data/user-script.sh")
       setup_request = oci_objectstorage_preauthrequest.setup_access.access_uri
       region        = var.region
-      timezone      = var.timezone
     }))
   }
 
