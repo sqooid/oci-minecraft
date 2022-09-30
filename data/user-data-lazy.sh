@@ -11,6 +11,7 @@ apt-get upgrade -q -y
 apt-get install -q -y openjdk-17-jre-headless vim
 
 iptables -I INPUT 6 -m state --state NEW -p tcp --dport 25565 -j ACCEPT
+netfilter-persistent save
 
 timedatectl set-timezone ${timezone}
 
