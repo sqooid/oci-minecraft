@@ -5,3 +5,5 @@ services:
     volumes:
       - .:/terraform
     working_dir: /terraform
+    environment:
+      - TF_HTTP_ADDRESS

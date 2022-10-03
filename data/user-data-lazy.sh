@@ -43,4 +43,9 @@ cd /minecraft
 curl -s "$${BUCKET}server-setup-base.sh" -o server-setup-base.sh
 chmod +x server-setup-base.sh
 chown ubuntu:ubuntu server-setup-base.sh
-su -c "./server-setup-base.sh" ubuntu >> server-setup.log 2>&1
+if [[ -f 'initialized' ]]; do
+	echo "Server base already initialized"
+else
+	su -c "./server-setup-base.sh" ubuntu >> server-setup.log 2>&1
+	touch initialized
+done

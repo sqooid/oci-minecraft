@@ -12,6 +12,7 @@ chmod +x server.jar
 mkdir -p mods && cd mods
 curl \
 -sOL https://github.com/gnembon/fabric-carpet/releases/download/1.4.83/fabric-carpet-1.19.1-1.4.83+v220727.jar \
+-sOL https://github.com/gnembon/carpet-extra/releases/download/1.4.83/carpet-extra-1.19.1-1.4.83.jar \
 -sO https://mediafiles.forgecdn.net/files/3923/806/lithium-fabric-mc1.19.2-0.8.3.jar \
 -sO https://mediafiles.forgecdn.net/files/3936/24/fabric-api-0.60.0%2B1.19.2.jar \
 -sO https://mediafiles.forgecdn.net/files/3906/387/cloth-config-8.0.75-fabric.jar \
